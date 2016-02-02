@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="sateesh.com.goldapp.MainActivity">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="20dp"
+        android:gravity="center">
+
+        <TableRow android:gravity="center">
+
+            <ImageButton
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:id="@+id/gold_image"/>
+
+            <ImageButton
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:id="@+id/silver_image"/>
+        </TableRow>
+
+        <TableRow android:gravity="center"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:gravity="center"
+                android:text="@string/main_gold" />
+
+            <TextView
+                android:gravity="center"
+                android:text="@string/main_silver" />
+
+        </TableRow>
+
+        <TableRow android:gravity="center"
+            android:layout_marginTop="20dp">
+
+            <ImageButton
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:id="@+id/chart_image"/>
+
+            <ImageButton
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:id="@+id/search_image"/>
+        </TableRow>
+
+        <TableRow android:gravity="center"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:gravity="center"
+                android:text="@string/main_trends"
+                />
+
+            <TextView
+                android:gravity="center"
+                android:text="@string/main_search"
+                />
+
+        </TableRow>
+    </TableLayout>
+
+
+</LinearLayout>
