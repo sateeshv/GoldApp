@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import sateesh.com.goldapp.Data.DatabaseContract;
@@ -37,7 +38,7 @@ public class GoldPriceCursorAdapter extends CursorAdapter {
         TextView date = (TextView) view.findViewById(R.id.text0);
         TextView   gold_8_grams_text = (TextView) view.findViewById(R.id.text1);
         TextView   gold_1_gram_text = (TextView) view.findViewById(R.id.text2);
-        TextView    change = (TextView) view.findViewById(R.id.text3);
+        ImageView change = (ImageView) view.findViewById(R.id.text3);
 
         String rawDate = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_DATE));
         String formattedDate = rawDate.split("-")[0] + " - " + rawDate.split("-")[1];
@@ -48,7 +49,7 @@ public class GoldPriceCursorAdapter extends CursorAdapter {
 //        Log.v("Sateesh: ", "RawDate is: " + rawRollNo);
 
         int gold_1_gram = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_GOLD_1_GM));
-        gold_8_grams_text.setText(String.valueOf(gold_1_gram*8));
+        gold_8_grams_text.setText(String.valueOf(gold_1_gram * 8));
 
 
         gold_1_gram_text.setText(String.valueOf(gold_1_gram));
@@ -57,7 +58,19 @@ public class GoldPriceCursorAdapter extends CursorAdapter {
 
 //        ViewHolder.gender.setText("");
 
-        change.setText(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_GOLD_CHANGE)));
+        String changeStatus = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_GOLD_CHANGE));
+        switch (changeStatus){
+            case "No Change":
+                change.setImageResource(R.drawable.nochange);
+                break;
+            case "Increased":
+                change.setImageResource(R.drawable.increase);
+                break;
+            case "Decreased":
+                change.setImageResource(R.drawable.decrease);
+                break;
+        }
+//        change.setText(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_GOLD_CHANGE)));
 //        Log.v("Sateesh: ", "*** bindView reached");
 //        ViewHolder holder = (ViewHolder) view.getTag();
 //        Log.v("Sateesh: ", "*** Cursor Data in bindView: " + DatabaseUtils.dumpCursorToString(cursor));
