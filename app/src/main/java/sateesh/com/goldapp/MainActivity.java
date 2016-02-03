@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.insert:
-                FetchSheetTask task = new FetchSheetTask(getApplicationContext());
+                FetchPricesTask task = new FetchPricesTask(getApplicationContext());
                 task.execute();
                 break;
 

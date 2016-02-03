@@ -25,11 +25,11 @@ import java.util.List;
 import sateesh.com.goldapp.Data.DatabaseContract;
 
 
-public class FetchSheetTask extends AsyncTask<Void, Void, Void> {
+public class FetchPricesTask extends AsyncTask<Void, Void, Void> {
     Context context;
     double startTime;
 
-    public FetchSheetTask(Context context) {
+    public FetchPricesTask(Context context) {
         this.context = context;
     }
 
@@ -203,7 +203,7 @@ public class FetchSheetTask extends AsyncTask<Void, Void, Void> {
 
                 Uri data_uri = Uri.withAppendedPath(DatabaseContract.PriceInfo.CONTENT_URI, "0");
                 int insertedRecords = context.getContentResolver().bulkInsert(data_uri, dataArray);
-                Log.v("Sateesh: ", "*** FetchSheetTask + Data Inserted Records: " + insertedRecords);
+                Log.v("Sateesh: ", "*** FetchPricesTask + Data Inserted Records: " + insertedRecords);
             }
             if (cityData.size() > 0) {
                 ContentValues[] cityDataArray = new ContentValues[cityData.size()];
@@ -212,7 +212,7 @@ public class FetchSheetTask extends AsyncTask<Void, Void, Void> {
 
                 Uri city_uri = Uri.withAppendedPath(DatabaseContract.CityInfo.CONTENT_URI, "1");
                 int insertedRecords = context.getContentResolver().bulkInsert(city_uri, cityDataArray);
-                Log.v("Sateesh: ", "*** FetchSheetTask + City Inserted Records: " + insertedRecords);
+                Log.v("Sateesh: ", "*** FetchPricesTask + City Inserted Records: " + insertedRecords);
             }
             double endTime = System.currentTimeMillis();
             Log.v("Sateesh: ", "*** Time taken to insert " + ((endTime - startTime)/1000));

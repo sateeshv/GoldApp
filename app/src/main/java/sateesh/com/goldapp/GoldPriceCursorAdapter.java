@@ -35,22 +35,29 @@ public class GoldPriceCursorAdapter extends CursorAdapter {
 
 
         TextView date = (TextView) view.findViewById(R.id.text0);
-        TextView   rollNo = (TextView) view.findViewById(R.id.text1);
-        TextView   studentName = (TextView) view.findViewById(R.id.text2);
-        TextView    gender = (TextView) view.findViewById(R.id.text3);
+        TextView   gold_8_grams_text = (TextView) view.findViewById(R.id.text1);
+        TextView   gold_1_gram_text = (TextView) view.findViewById(R.id.text2);
+        TextView    change = (TextView) view.findViewById(R.id.text3);
 
-        date.setText(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_DATE)));
+        String rawDate = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_DATE));
+        String formattedDate = rawDate.split("-")[0] + " - " + rawDate.split("-")[1];
+        date.setText(formattedDate);
 //        ViewHolder.rollNo.setText("");
 
 //        String rawRollNo = String.valueOf(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.ClassInfo.COLUMN_ROLLNO)));
 //        Log.v("Sateesh: ", "RawDate is: " + rawRollNo);
-        rollNo.setText(String.valueOf(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_DATE))));
+
+        int gold_1_gram = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_GOLD_1_GM));
+        gold_8_grams_text.setText(String.valueOf(gold_1_gram*8));
+
+
+        gold_1_gram_text.setText(String.valueOf(gold_1_gram));
 
 //        ViewHolder.studentName.setText("");
-        studentName.setText(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_GOLD_1_GM)));
+
 //        ViewHolder.gender.setText("");
 
-        gender.setText(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_GOLD_CHANGE)));
+        change.setText(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_GOLD_CHANGE)));
 //        Log.v("Sateesh: ", "*** bindView reached");
 //        ViewHolder holder = (ViewHolder) view.getTag();
 //        Log.v("Sateesh: ", "*** Cursor Data in bindView: " + DatabaseUtils.dumpCursorToString(cursor));

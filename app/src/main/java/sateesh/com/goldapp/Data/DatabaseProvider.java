@@ -37,6 +37,7 @@ public class DatabaseProvider extends ContentProvider {
     public static final int DELETE_CITIES = 12;
 
     public static final int QUERY_CITY = 13;
+    public static final int QUERY_CITY_COUNT = 14;
 
     @Override
     public boolean onCreate() {
@@ -58,7 +59,10 @@ public class DatabaseProvider extends ContentProvider {
         matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_PRICE_INFO + "/8", QUERY_CITY_SILVER_LAST_30_DAYS);
         matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_PRICE_INFO + "/9", QUERY_CITY_SILVER_LAST_90_DAYS);
         matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_PRICE_INFO + "/10", QUERY_CITY_SILVER_LAST_12_MONTHS);
-        matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_PRICE_INFO + "/13", QUERY_CITY_SILVER_LAST_12_MONTHS);
+        matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_PRICE_INFO + "/11", DELETE_PRICES);
+        matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_PRICE_INFO + "/12", DELETE_CITIES);
+        matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_CITY_INFO + "/13", QUERY_CITY);
+        matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_PRICE_INFO + "/14", QUERY_CITY_COUNT);
     }
 
     @Nullable
