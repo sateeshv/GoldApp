@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import sateesh.com.goldapp.Network.ExitNoInternet;
@@ -31,6 +32,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         search_icon = (ImageButton) findViewById(R.id.search_image);
         search_icon.setOnClickListener(this);
+
+        Button insert_records = (Button) findViewById(R.id.insert);
+        insert_records.setOnClickListener(this);
+
+        Button delete_records = (Button) findViewById(R.id.delete);
+        delete_records.setOnClickListener(this);
     }
 
     @Override
@@ -67,6 +74,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.search_image:
                 Intent search = new Intent(MainActivity.this, SearchActivity.class);
                 startActivity(search);
+                break;
+
+            case R.id.insert:
+                break;
+
+            case R.id.delete:
                 break;
 
         }

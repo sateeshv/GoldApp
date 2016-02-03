@@ -8,25 +8,26 @@
 
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:gravity="center">
 
         <TableRow android:gravity="center">
 
             <ImageButton
+                android:id="@+id/gold_image"
                 android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:id="@+id/gold_image"/>
+                android:layout_height="100dp" />
 
             <ImageButton
+                android:id="@+id/silver_image"
                 android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:id="@+id/silver_image"/>
+                android:layout_height="100dp" />
         </TableRow>
 
-        <TableRow android:gravity="center"
-            android:layout_marginTop="5dp">
+        <TableRow
+            android:layout_marginTop="5dp"
+            android:gravity="center">
 
             <TextView
                 android:gravity="center"
@@ -38,35 +39,47 @@
 
         </TableRow>
 
-        <TableRow android:gravity="center"
-            android:layout_marginTop="20dp">
+        <TableRow
+            android:layout_marginTop="20dp"
+            android:gravity="center">
 
             <ImageButton
+                android:id="@+id/chart_image"
                 android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:id="@+id/chart_image"/>
+                android:layout_height="100dp" />
 
             <ImageButton
+                android:id="@+id/search_image"
                 android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:id="@+id/search_image"/>
+                android:layout_height="100dp" />
         </TableRow>
 
-        <TableRow android:gravity="center"
-            android:layout_marginTop="5dp">
+        <TableRow
+            android:layout_marginTop="5dp"
+            android:gravity="center">
 
             <TextView
                 android:gravity="center"
-                android:text="@string/main_trends"
-                />
+                android:text="@string/main_trends" />
 
             <TextView
                 android:gravity="center"
-                android:text="@string/main_search"
-                />
+                android:text="@string/main_search" />
 
         </TableRow>
     </TableLayout>
 
+    <Button
+        android:id="@+id/insert"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="20dp"
+        android:text="Insert" />
 
+    <Button
+        android:id="@+id/delete"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="20dp"
+        android:text="delete" />
 </LinearLayout>
