@@ -1,12 +1,14 @@
 package sateesh.com.goldapp;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import sateesh.com.goldapp.Data.DatabaseContract;
 import sateesh.com.goldapp.Network.ExitNoInternet;
 import sateesh.com.goldapp.Network.ExitWithInternet;
 import sateesh.com.goldapp.Network.InternetCheck;
@@ -77,9 +79,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.insert:
+                FetchSheetTask task = new FetchSheetTask(getApplicationContext());
+                task.execute();
                 break;
 
             case R.id.delete:
+                Uri uri_all_records = Uri.withAppendedPath(DatabaseContract.PriceInfo.CONTENT_URI, "11");
+                getContentResolver().delete(uri_all_records, null, null);
+                Uri city_uri = Uri.withAppendedPath(DatabaseContract.CityInfo.CONTENT_URI, "12");
+                getContentResolver().delete(city_uri, null, null);
                 break;
 
         }

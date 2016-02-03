@@ -27,7 +27,7 @@ import sateesh.com.goldapp.Data.DatabaseContract;
 
 public class FetchSheetTask extends AsyncTask<Void, Void, Void> {
     Context context;
-    long startTime;
+    double startTime;
 
     public FetchSheetTask(Context context) {
         this.context = context;
@@ -44,6 +44,7 @@ public class FetchSheetTask extends AsyncTask<Void, Void, Void> {
         Uri uri = Uri.withAppendedPath(DatabaseContract.PriceInfo.CONTENT_URI, "2");
         Log.v("Sateesh: ", "*** URI link is: " + uri);
         Cursor cursorLastRecord = context.getContentResolver().query(uri, null, null, null, null);
+        Log.v("Sateesh: ", "*** are there any records: " + (cursorLastRecord != null ? cursorLastRecord.getCount() : 0));
 
         String lastInsertedDate = null;
 
@@ -51,18 +52,21 @@ public class FetchSheetTask extends AsyncTask<Void, Void, Void> {
         String sheetURL = null;
 
         try {
-            if (cursorLastRecord.getCount() != 0) {
+            if (cursorLastRecord != null ) {
                 cursorLastRecord.moveToFirst();
                 lastInsertedDate = cursorLastRecord.getString(cursorLastRecord.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_DATE));
                 Log.v("Sateesh: ", "*** Last Inserted Date is: " + lastInsertedDate);
                 sheetURL = "https://spreadsheets.google.com/feeds/list/" + KEY + "/od6/public/values?alt=json" + "&sq=date>" + lastInsertedDate;
+                cursorLastRecord.close();
             } else {
                 Log.v("Sateesh: ", "*** No insertions till Now");
                 sheetURL = "https://spreadsheets.google.com/feeds/list/" + KEY + "/od6/public/values?alt=json";
             }
+
         } catch (CursorIndexOutOfBoundsException e) {
             Log.v("Sateesh: ", "*** cursor Index Out of Bound");
         }
+
 
 //        Establishing connection to Spreadsheet
         HttpURLConnection urlConnection = null;
@@ -210,8 +214,8 @@ public class FetchSheetTask extends AsyncTask<Void, Void, Void> {
                 int insertedRecords = context.getContentResolver().bulkInsert(city_uri, cityDataArray);
                 Log.v("Sateesh: ", "*** FetchSheetTask + City Inserted Records: " + insertedRecords);
             }
-            long endTime = System.currentTimeMillis();
-            Log.v("Sateesh: ", "*** Time taken to insert " + (endTime - startTime));
+            double endTime = System.currentTimeMillis();
+            Log.v("Sateesh: ", "*** Time taken to insert " + ((endTime - startTime)/1000));
         } else {
             Log.v("Sateesh: ", "NO New Data Available");
             long endTime = System.currentTimeMillis();
