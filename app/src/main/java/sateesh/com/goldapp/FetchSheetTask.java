@@ -57,7 +57,7 @@ public class FetchSheetTask extends AsyncTask<Void, Void, Void> {
                 lastInsertedDate = cursorLastRecord.getString(cursorLastRecord.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_DATE));
                 Log.v("Sateesh: ", "*** Last Inserted Date is: " + lastInsertedDate);
                 sheetURL = "https://spreadsheets.google.com/feeds/list/" + KEY + "/od6/public/values?alt=json" + "&sq=date>" + lastInsertedDate;
-                cursorLastRecord.close();
+
             } else {
                 Log.v("Sateesh: ", "*** No insertions till Now");
                 sheetURL = "https://spreadsheets.google.com/feeds/list/" + KEY + "/od6/public/values?alt=json";

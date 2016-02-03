@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -85,9 +86,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.delete:
                 Uri uri_all_records = Uri.withAppendedPath(DatabaseContract.PriceInfo.CONTENT_URI, "11");
-                getContentResolver().delete(uri_all_records, null, null);
+                int delete_prices = getContentResolver().delete(uri_all_records, null, null);
                 Uri city_uri = Uri.withAppendedPath(DatabaseContract.CityInfo.CONTENT_URI, "12");
-                getContentResolver().delete(city_uri, null, null);
+                int delete_cities = getContentResolver().delete(city_uri, null, null);
+                Log.v("Sateesh: ", "City Records delete: " + delete_cities + "  Price records delete: " + delete_prices);
                 break;
 
         }

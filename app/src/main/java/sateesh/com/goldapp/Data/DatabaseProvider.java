@@ -36,6 +36,8 @@ public class DatabaseProvider extends ContentProvider {
     public static final int DELETE_PRICES = 11;
     public static final int DELETE_CITIES = 12;
 
+    public static final int QUERY_CITY = 13;
+
     @Override
     public boolean onCreate() {
         databaseHelper = new DatabaseHelper(getContext());
@@ -56,6 +58,7 @@ public class DatabaseProvider extends ContentProvider {
         matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_PRICE_INFO + "/8", QUERY_CITY_SILVER_LAST_30_DAYS);
         matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_PRICE_INFO + "/9", QUERY_CITY_SILVER_LAST_90_DAYS);
         matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_PRICE_INFO + "/10", QUERY_CITY_SILVER_LAST_12_MONTHS);
+        matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_PRICE_INFO + "/13", QUERY_CITY_SILVER_LAST_12_MONTHS);
     }
 
     @Nullable
@@ -109,6 +112,11 @@ public class DatabaseProvider extends ContentProvider {
 
             case QUERY_CITY_SILVER_LAST_12_MONTHS:
                 cursorData = databaseHelper.getReadableDatabase().query(DatabaseContract.PriceInfo.TABLE_NAME, projection, selection, selectionArgs, sortOrder, null, DatabaseContract.PriceInfo.COLUMN_DATE + " DESC ", " 365");
+                cursorData.setNotificationUri(getContext().getContentResolver(), uri);
+                break;
+
+            case QUERY_CITY:
+                cursorData = databaseHelper.getReadableDatabase().query(DatabaseContract.CityInfo.TABLE_NAME, null, null, null, null, null, null, null);
                 cursorData.setNotificationUri(getContext().getContentResolver(), uri);
                 break;
         }
