@@ -16,7 +16,6 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-
             android:text="@string/chart_city" />
 
         <Spinner
@@ -49,8 +48,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:textAllCaps="true"
-            android:text="@string/data_gold_date"/>
+            android:text="@string/data_gold_date"
+            android:textAllCaps="true" />
 
         <TextView
             android:id="@+id/text1"
@@ -58,8 +57,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:textAllCaps="true"
-            android:text="@string/data_gold_8grams" />
+            android:text="@string/data_gold_8grams"
+            android:textAllCaps="true" />
 
         <TextView
             android:id="@+id/text2"
@@ -67,8 +66,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:textAllCaps="true"
-            android:text="@string/data_gold_1grams" />
+            android:text="@string/data_gold_1grams"
+            android:textAllCaps="true" />
 
         <TextView
             android:id="@+id/text3"
@@ -76,8 +75,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:textAllCaps="true"
-            android:text="@string/data_gold_change" />
+            android:text="@string/data_gold_change"
+            android:textAllCaps="true" />
     </LinearLayout>
 
     <ListView

@@ -50,7 +50,7 @@ public class DatabaseProvider extends ContentProvider {
     static {
         matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_PRICE_INFO + "/0", INSERT_PRICES);
         matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_CITY_INFO + "/1", INSERT_CITIES);
-        matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_CITY_INFO + "/2", QUERY_LAST_RECORD);
+        matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_PRICE_INFO + "/2", QUERY_LAST_RECORD);
         matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_PRICE_INFO + "/3", QUERY_CITY_GOLD_7_DAYS);
         matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_PRICE_INFO + "/4", QUERY_CITY_GOLD_LAST_30_DAYS);
         matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_PRICE_INFO + "/5", QUERY_CITY_GOLD_LAST_90_DAYS);
@@ -60,9 +60,9 @@ public class DatabaseProvider extends ContentProvider {
         matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_PRICE_INFO + "/9", QUERY_CITY_SILVER_LAST_90_DAYS);
         matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_PRICE_INFO + "/10", QUERY_CITY_SILVER_LAST_12_MONTHS);
         matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_PRICE_INFO + "/11", DELETE_PRICES);
-        matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_PRICE_INFO + "/12", DELETE_CITIES);
+        matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_CITY_INFO + "/12", DELETE_CITIES);
         matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_CITY_INFO + "/13", QUERY_CITY);
-        matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_PRICE_INFO + "/14", QUERY_CITY_COUNT);
+        matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_CITY_INFO + "/14", QUERY_CITY_COUNT);
     }
 
     @Nullable
@@ -74,6 +74,8 @@ public class DatabaseProvider extends ContentProvider {
 
         switch (match) {
             case QUERY_LAST_RECORD:
+//                String query = "SELECT * FROM PriceInfo ORDER BY date(Date) DESC Limit 1";
+//               cursorData = databaseHelper.getReadableDatabase().rawQuery(query, null);
                 cursorData = databaseHelper.getReadableDatabase().query(DatabaseContract.PriceInfo.TABLE_NAME, projection, selection, selectionArgs, sortOrder, null, DatabaseContract.PriceInfo.COLUMN_DATE + " DESC ", " 1");
                 cursorData.setNotificationUri(getContext().getContentResolver(), uri);
                 break;
@@ -190,6 +192,7 @@ public class DatabaseProvider extends ContentProvider {
             default:
                 return super.bulkInsert(uri, values);
         }
+        Log.v("Sateesh: " , "*** Total Number of Price records Inserted: " +insertedRecords);
         return insertedRecords;
 
     }

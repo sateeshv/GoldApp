@@ -13,10 +13,11 @@ import android.widget.TextView;
 
 import sateesh.com.goldapp.Data.DatabaseContract;
 
-public class GoldPriceCursorAdapter extends CursorAdapter {
+public class SilverPriceCursorAdapter extends CursorAdapter {
 
     String[] Month_Names = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"};
-    public GoldPriceCursorAdapter(Context context, Cursor c, int flags) {
+
+    public SilverPriceCursorAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
         Log.v("Sateesh: ", "*** CursorAdapter Constructor reached");
     }
@@ -25,7 +26,7 @@ public class GoldPriceCursorAdapter extends CursorAdapter {
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         Log.v("Sateesh: ", "*** newView reached");
         Log.v("Sateesh: ", "*** Cursor Data in newView: " + DatabaseUtils.dumpCursorToString(cursor));
-        View view = LayoutInflater.from(context).inflate(R.layout.gold_price_layout, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.silver_price_layout, parent, false);
 //        ViewHolder holder = new ViewHolder(view);
 //        view.setTag(holder);
 
@@ -37,31 +38,30 @@ public class GoldPriceCursorAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
 
 
-        TextView date = (TextView) view.findViewById(R.id.text0);
-        TextView   gold_8_grams_text = (TextView) view.findViewById(R.id.text1);
-        TextView   gold_1_gram_text = (TextView) view.findViewById(R.id.text2);
+        TextView date = (TextView) view.findViewById(R.id.text1);
+        TextView silver_1_gram_text = (TextView) view.findViewById(R.id.text2);
         ImageView change = (ImageView) view.findViewById(R.id.text3);
 
         String rawDate = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_DATE));
-        String formattedDate = rawDate.split("-")[2] + " - " + Month_Names[(Integer.parseInt(rawDate.split("-")[1]))-1];
+        String formattedDate = rawDate.split("-")[2] + " - " + Month_Names[(Integer.parseInt(rawDate.split("-")[1])) - 1];
         date.setText(formattedDate);
 //        ViewHolder.rollNo.setText("");
 
 //        String rawRollNo = String.valueOf(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.ClassInfo.COLUMN_ROLLNO)));
 //        Log.v("Sateesh: ", "RawDate is: " + rawRollNo);
 
-        int gold_1_gram = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_GOLD_1_GM));
-        gold_8_grams_text.setText(String.valueOf(gold_1_gram * 8));
+        int silver_1_gram = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_SILVER_1_GM));
+//        gold_8_grams_text.setText(String.valueOf(gold_1_gram * 8));
 
 
-        gold_1_gram_text.setText(String.valueOf(gold_1_gram));
+        silver_1_gram_text.setText(String.valueOf(silver_1_gram));
 
 //        ViewHolder.studentName.setText("");
 
 //        ViewHolder.gender.setText("");
 
-        String changeStatus = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_GOLD_CHANGE));
-        switch (changeStatus){
+        String changeStatus = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_SILVER_CHANGE));
+        switch (changeStatus) {
             case "No Change":
                 change.setImageResource(R.drawable.nochange);
                 break;

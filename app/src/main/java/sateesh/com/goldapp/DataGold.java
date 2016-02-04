@@ -24,6 +24,7 @@ import sateesh.com.goldapp.Data.DatabaseContract;
 public class DataGold extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final String ARG_SECTION_NUMBER = "section_number";
 
+
     GoldPriceCursorAdapter cursorAdapter;
     SimpleCursorAdapter citySpinnerAdapter;
     String selectedCity;
@@ -74,7 +75,7 @@ public class DataGold extends Fragment implements LoaderManager.LoaderCallbacks<
                     cityFilter = new String[1];
                     cityFilter[0] = selectedCity;
                     Log.v("Sateesh: ", "CityFilter option value is: " + cityFilter[0].toString());
-                    getLoaderManager().initLoader(position, null, DataGold.this);
+                    getLoaderManager().restartLoader(position, null, DataGold.this);
                 }
 
             }
@@ -113,7 +114,7 @@ public class DataGold extends Fragment implements LoaderManager.LoaderCallbacks<
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        cursorAdapter.swapCursor(null);
     }
 }
 

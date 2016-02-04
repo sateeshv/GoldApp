@@ -52,7 +52,7 @@ public class FetchPricesTask extends AsyncTask<Void, Void, Void> {
         String sheetURL = null;
 
         try {
-            if (cursorLastRecord != null ) {
+            if (cursorLastRecord != null && cursorLastRecord.getCount() > 0) {
                 cursorLastRecord.moveToFirst();
                 lastInsertedDate = cursorLastRecord.getString(cursorLastRecord.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_DATE));
                 Log.v("Sateesh: ", "*** Last Inserted Date is: " + lastInsertedDate);
@@ -60,6 +60,7 @@ public class FetchPricesTask extends AsyncTask<Void, Void, Void> {
 
             } else {
                 Log.v("Sateesh: ", "*** No insertions till Now");
+//                https://spreadsheets.google.com/feeds/list/1mTZIS6-dg8Hxd7akQOgi1TdxRarmA7SMvS_nabrF_t0/od6/public/values?alt=json
                 sheetURL = "https://spreadsheets.google.com/feeds/list/" + KEY + "/od6/public/values?alt=json";
             }
 
@@ -197,6 +198,7 @@ public class FetchPricesTask extends AsyncTask<Void, Void, Void> {
 
             }
             if (data.size() > 0) {
+                Log.v("Sateesh: " , "*** Prices Records count is: " + data.size());
                 ContentValues[] dataArray = new ContentValues[data.size()];
                 ContentValues[] values = data.toArray(dataArray);
                 Log.v("Sateesh: ", "**** content Values data " + values);

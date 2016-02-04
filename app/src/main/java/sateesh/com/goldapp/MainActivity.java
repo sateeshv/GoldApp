@@ -3,11 +3,19 @@ package sateesh.com.goldapp;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 
 import sateesh.com.goldapp.Data.DatabaseContract;
 import sateesh.com.goldapp.Network.ExitNoInternet;
@@ -41,6 +49,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button delete_records = (Button) findViewById(R.id.delete);
         delete_records.setOnClickListener(this);
+
+        Button export_records = (Button) findViewById(R.id.export);
+        export_records.setOnClickListener(this);
     }
 
     @Override
@@ -91,6 +102,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int delete_cities = getContentResolver().delete(city_uri, null, null);
                 Log.v("Sateesh: ", "City Records delete: " + delete_cities + "  Price records delete: " + delete_prices);
                 break;
+
+            case R.id.export:
+
+                File sd = Environment.getExternalStorageDirectory();
+                File data = Environment.getDataDirectory();
+                FileChannel source = null;
+                FileChannel destination;
+                String SAMPLE_DB_NAME = "PriceDetails.db";
+                String currentDBPath = "/data/" + "sateesh.com.goldapp" + "/databases/" + SAMPLE_DB_NAME;
+                String backupDBPath = SAMPLE_DB_NAME;
+                File currentDB = new File(data, currentDBPath);
+                File backupDB = new File(sd, backupDBPath);
+                try {
+                    source = new FileInputStream(currentDB).getChannel();
+                    destination = new FileOutputStream(backupDB).getChannel();
+                    destination.transferFrom(source, 0, source.size());
+                    source.close();
+                    destination.close();
+                    Toast.makeText(MainActivity.this, "DB Exported!", Toast.LENGTH_LONG).show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
         }
 
