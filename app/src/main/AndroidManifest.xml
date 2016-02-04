@@ -51,6 +51,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="sateesh.com.goldapp.MainActivity" />
         </activity>
+        <activity android:name=".DrawActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_search"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="sateesh.com.goldapp.MainActivity" />
+        </activity>
         <provider
             android:name=".Data.DatabaseProvider"
             android:authorities="sateesh.com.goldapp" />

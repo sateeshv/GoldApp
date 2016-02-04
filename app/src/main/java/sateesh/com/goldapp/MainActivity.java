@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.chart_image:
-                Intent charts = new Intent(MainActivity.this, ChartsActivity.class);
+                Intent charts = new Intent(MainActivity.this, DrawActivity.class);
                 startActivity(charts);
                 break;
 
