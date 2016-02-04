@@ -39,6 +39,8 @@ public class DatabaseProvider extends ContentProvider {
     public static final int QUERY_CITY = 13;
     public static final int QUERY_CITY_COUNT = 14;
 
+    public static final int QUERY_DATE_CITY = 15;
+
     @Override
     public boolean onCreate() {
         databaseHelper = new DatabaseHelper(getContext());
@@ -63,6 +65,7 @@ public class DatabaseProvider extends ContentProvider {
         matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_CITY_INFO + "/12", DELETE_CITIES);
         matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_CITY_INFO + "/13", QUERY_CITY);
         matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_CITY_INFO + "/14", QUERY_CITY_COUNT);
+        matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_PRICE_INFO + "/15", QUERY_DATE_CITY);
     }
 
     @Nullable
@@ -74,8 +77,6 @@ public class DatabaseProvider extends ContentProvider {
 
         switch (match) {
             case QUERY_LAST_RECORD:
-//                String query = "SELECT * FROM PriceInfo ORDER BY date(Date) DESC Limit 1";
-//               cursorData = databaseHelper.getReadableDatabase().rawQuery(query, null);
                 cursorData = databaseHelper.getReadableDatabase().query(DatabaseContract.PriceInfo.TABLE_NAME, projection, selection, selectionArgs, sortOrder, null, DatabaseContract.PriceInfo.COLUMN_DATE + " DESC ", " 1");
                 cursorData.setNotificationUri(getContext().getContentResolver(), uri);
                 break;
@@ -125,6 +126,13 @@ public class DatabaseProvider extends ContentProvider {
                 cursorData = databaseHelper.getReadableDatabase().query(DatabaseContract.CityInfo.TABLE_NAME, null, null, null, null, null, null, null);
                 cursorData.setNotificationUri(getContext().getContentResolver(), uri);
                 break;
+
+            case QUERY_DATE_CITY:
+                String query = "SELECT * FROM PriceInfo where " + selection;
+                Log.v("Sateesh: " , "*** RawQuery string is : " + query );
+                cursorData = databaseHelper.getReadableDatabase().rawQuery(query, selectionArgs);
+
+
         }
 
         return cursorData;
@@ -192,7 +200,7 @@ public class DatabaseProvider extends ContentProvider {
             default:
                 return super.bulkInsert(uri, values);
         }
-        Log.v("Sateesh: " , "*** Total Number of Price records Inserted: " +insertedRecords);
+        Log.v("Sateesh: ", "*** Total Number of Price records Inserted: " + insertedRecords);
         return insertedRecords;
 
     }

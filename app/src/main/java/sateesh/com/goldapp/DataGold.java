@@ -56,7 +56,7 @@ public class DataGold extends Fragment implements LoaderManager.LoaderCallbacks<
         citySpinner.setAdapter(citySpinnerAdapter);
         int count = citySpinner.getCount();
 
-        ListView listView = (ListView) v.findViewById(R.id.list_items);
+        ListView listView = (ListView) v.findViewById(R.id.gold_list_items);
         cursorAdapter = new GoldPriceCursorAdapter(getActivity(), null, 0);
         listView.setAdapter(cursorAdapter);
 

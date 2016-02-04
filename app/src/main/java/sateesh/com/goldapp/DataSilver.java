@@ -55,7 +55,7 @@ public class DataSilver extends Fragment implements LoaderManager.LoaderCallback
         citySpinner.setAdapter(citySpinnerAdapter);
         int count = citySpinner.getCount();
 
-        ListView listView = (ListView) v.findViewById(R.id.list_items);
+        ListView listView = (ListView) v.findViewById(R.id.silver_list_items);
         cursorAdapter = new SilverPriceCursorAdapter(getActivity(), null, 0);
         listView.setAdapter(cursorAdapter);
 

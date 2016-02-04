@@ -29,6 +29,7 @@
     <string name="search_search">Search</string>
     <string name="search_text_date">Date</string>
     <string name="search_hint_date">Choose Date</string>
+    <string name="search_button">Search</string>
 
     <string-array name="city_arrays">
         <item>Gudur</item>
