@@ -20,7 +20,6 @@ import android.widget.TextView;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -40,7 +39,7 @@ import sateesh.com.goldapp.Data.DatabaseContract;
  */
 public class ChartGold extends Fragment implements OnChartValueSelectedListener, View.OnClickListener {
 
-
+    static String[] Month_Names = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"};
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     SimpleCursorAdapter citySpinnerAdapter;
@@ -133,13 +132,15 @@ public class ChartGold extends Fragment implements OnChartValueSelectedListener,
         mChart.setTouchEnabled(true);
 
         // enable scaling and dragging
-        mChart.setDragEnabled(true);
+        mChart.setDragEnabled(false);
         mChart.setScaleEnabled(true);
-        // mChart.setScaleXEnabled(true);
-        // mChart.setScaleYEnabled(true);
+        mChart.setScaleXEnabled(true);
+        mChart.setScaleYEnabled(true);
+        mChart.setDoubleTapToZoomEnabled(false);
+        mChart.highlightValues(null);
 
         // if disabled, scaling can be done on x- and y-axis separately
-        mChart.setPinchZoom(true);
+        mChart.setPinchZoom(false);
 
         // set an alternative background color
         // mChart.setBackgroundColor(Color.GRAY);
@@ -151,42 +152,48 @@ public class ChartGold extends Fragment implements OnChartValueSelectedListener,
         // set the marker to the chart
         mChart.setMarkerView(mv);
 
-        // x-axis limit line
-        LimitLine llXAxis = new LimitLine(10f, "Index 10");
-        llXAxis.setLineWidth(4f);
-        llXAxis.enableDashedLine(10f, 10f, 0f);
-        llXAxis.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
-        llXAxis.setTextSize(10f);
+//        // x-axis limit line
+//        LimitLine llXAxis = new LimitLine(10f, "Index 10");
+//        llXAxis.setLineWidth(4f);
+//        llXAxis.enableDashedLine(10f, 10f, 0f);
+//        llXAxis.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
+//        llXAxis.setTextSize(10f);
 
         XAxis xAxis = mChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setTextSize(10f);
+        xAxis.setTextColor(Color.RED);
+        xAxis.setDrawAxisLine(true);
+        xAxis.setDrawGridLines(false);
+
         //xAxis.setValueFormatter(new MyCustomXAxisValueFormatter());
         //xAxis.addLimitLine(llXAxis); // add x-axis limit line
 
 //        Typeface tf = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
 
-        LimitLine ll1 = new LimitLine(130f, "Upper Limit");
-        ll1.setLineWidth(4f);
-        ll1.enableDashedLine(10f, 10f, 0f);
-        ll1.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
-        ll1.setTextSize(10f);
-//        ll1.setTypeface(tf);
+//        LimitLine ll1 = new LimitLine(130f, "Upper Limit");
+//        ll1.setLineWidth(4f);
+//        ll1.enableDashedLine(10f, 10f, 0f);
+//        ll1.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
+//        ll1.setTextSize(10f);
+////        ll1.setTypeface(tf);
 
-        LimitLine ll2 = new LimitLine(-30f, "Lower Limit");
-        ll2.setLineWidth(4f);
-        ll2.enableDashedLine(10f, 10f, 0f);
-        ll2.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
-        ll2.setTextSize(10f);
-//        ll2.setTypeface(tf);
+//        LimitLine ll2 = new LimitLine(-30f, "Lower Limit");
+//        ll2.setLineWidth(4f);
+//        ll2.enableDashedLine(10f, 10f, 0f);
+//        ll2.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
+//        ll2.setTextSize(10f);
+////        ll2.setTypeface(tf);
 
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.removeAllLimitLines(); // reset all limit lines to avoid overlapping lines
-        leftAxis.addLimitLine(ll1);
-        leftAxis.addLimitLine(ll2);
+//        leftAxis.addLimitLine(ll1);
+//        leftAxis.addLimitLine(ll2);
 //        leftAxis.setAxisMaxValue(220f);
 //        leftAxis.setAxisMinValue(-50f);
         leftAxis.setStartAtZero(false);
         //leftAxis.setYOffset(20f);
-        leftAxis.enableGridDashedLine(10f, 10f, 0f);
+//        leftAxis.enableGridDashedLine(10f, 10f, 0f);
 
         // limit lines are drawn behind data (and not on top)
         leftAxis.setDrawLimitLinesBehindData(true);
@@ -197,7 +204,7 @@ public class ChartGold extends Fragment implements OnChartValueSelectedListener,
         //mChart.getViewPortHandler().setMaximumScaleX(2f);
 
         mChart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
-//        mChart.invalidate();
+        mChart.invalidate();
 
         // get the legend (only possible after setting data)
         Legend l = mChart.getLegend();
@@ -248,7 +255,7 @@ public class ChartGold extends Fragment implements OnChartValueSelectedListener,
                 int columnIndexOrThrow = cursorData.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_DATE);
                 String rawDate = cursorData.getString(columnIndexOrThrow);
                 Log.v("Sateesh: ", "*** raw Date each Value: " + rawDate);
-                String finalDateValue = rawDate.split("-")[2];
+                String finalDateValue = rawDate.split("-")[2]+  "-" + Month_Names[(Integer.parseInt(rawDate.split("-")[1])-1)];
                 Log.v("Sateesh: ", "*** final Date each Value: " + finalDateValue);
                 xVals.add(finalDateValue);
             }
@@ -289,19 +296,21 @@ public class ChartGold extends Fragment implements OnChartValueSelectedListener,
         // set1.setFillColor(Color.RED);
 
         // set the line to be drawn like this "- - - - - -"
-        set1.enableDashedLine(10f, 5f, 0f);
-        set1.enableDashedHighlightLine(10f, 5f, 0f);
+//        set1.enableDashedLine(10f, 5f, 0f);
+//        set1.enableDashedHighlightLine(10f, 5f, 0f);
         set1.setColor(Color.BLACK);
         set1.setCircleColor(Color.BLACK);
         set1.setLineWidth(1f);
-        set1.setCircleRadius(3f);
+        set1.setCircleRadius(0f);
         set1.setDrawCircleHole(false);
         set1.setValueTextSize(9f);
         set1.setFillColor(R.color.colorAccent);
+        set1.setCubicIntensity(20f);
+
 //        Drawable drawable = ContextCompat.getDrawable(this, R.drawable.fade_red);
 //        set1.setFillDrawable(drawable);
-        set1.setDrawFilled(true);
-
+        set1.setDrawFilled(false);
+        set1.isDrawValuesEnabled();
         ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
         dataSets.add(set1); // add the datasets
 
@@ -316,6 +325,7 @@ public class ChartGold extends Fragment implements OnChartValueSelectedListener,
     @Override
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
         Log.i("Entry selected", e.toString());
+
         Log.i("", "low: " + mChart.getLowestVisibleXIndex() + ", high: " + mChart.getHighestVisibleXIndex());
     }
 
