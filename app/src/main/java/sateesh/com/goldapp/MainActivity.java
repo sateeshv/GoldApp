@@ -52,6 +52,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button export_records = (Button) findViewById(R.id.export);
         export_records.setOnClickListener(this);
+
+        Button chart = (Button) findViewById(R.id.chart);
+        chart.setOnClickListener(this);
     }
 
     @Override
@@ -81,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.chart_image:
-                Intent charts = new Intent(MainActivity.this, DrawActivity.class);
+                Intent charts = new Intent(MainActivity.this, ChartsActivity.class);
                 startActivity(charts);
                 break;
 
@@ -124,6 +127,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                break;
+
+            case R.id.chart:
+
+                Intent chart_template = new Intent(MainActivity.this, DrawActivity.class);
+                startActivity(chart_template);
+                break;
 
         }
 

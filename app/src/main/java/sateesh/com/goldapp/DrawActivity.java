@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -21,8 +20,6 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.listener.ChartTouchListener;
-import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import java.util.ArrayList;
@@ -30,8 +27,7 @@ import java.util.List;
 
 import sateesh.com.goldapp.Data.DatabaseContract;
 
-public class DrawActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener,
-        OnChartGestureListener, OnChartValueSelectedListener {
+public class DrawActivity extends AppCompatActivity implements OnChartValueSelectedListener {
 
     private LineChart mChart;
     private SeekBar mSeekBarX, mSeekBarY;
@@ -41,9 +37,9 @@ public class DrawActivity extends AppCompatActivity implements SeekBar.OnSeekBar
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_draw);
-
-        tvX = (TextView) findViewById(R.id.tvXMax);
-        tvY = (TextView) findViewById(R.id.tvYMax);
+//
+//        tvX = (TextView) findViewById(R.id.tvXMax);
+//        tvY = (TextView) findViewById(R.id.tvYMax);
 
 //        mSeekBarX = (SeekBar) findViewById(R.id.seekBar1);
 //        mSeekBarY = (SeekBar) findViewById(R.id.seekBar2);
@@ -292,29 +288,6 @@ public class DrawActivity extends AppCompatActivity implements SeekBar.OnSeekBar
 //        return true;
 //    }
 
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-        tvX.setText("" + (mSeekBarX.getProgress() + 1));
-        tvY.setText("" + (mSeekBarY.getProgress()));
-
-        setData(mSeekBarX.getProgress() + 1, mSeekBarY.getProgress());
-
-        // redraw
-        mChart.invalidate();
-    }
-
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-        // TODO Auto-generated method stub
-
-    }
 
     private void setData(int count, float range) {
 
@@ -328,7 +301,7 @@ public class DrawActivity extends AppCompatActivity implements SeekBar.OnSeekBar
 
 //        cursorData.moveToFirst();
 
-        if(cursorData != null) {
+        if (cursorData != null) {
 //        while (!cursorData.isAfterLast()) {
             for (cursorData.moveToFirst(); !cursorData.isAfterLast(); cursorData.moveToNext()) {
                 int columnIndexOrThrow = cursorData.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_DATE);
@@ -351,23 +324,23 @@ public class DrawActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         int cursorDataValue = cursorData.getCount();
         int rollNocursorDataValue = rollNocursorData.getCount();
         int i = 0;
-        Log.v("Sateesh: " ,  "*** X and Y Column Sizes are : " + cursorDataValue + " *** " + rollNocursorDataValue);
+        Log.v("Sateesh: ", "*** X and Y Column Sizes are : " + cursorDataValue + " *** " + rollNocursorDataValue);
 //        List<Entry> yVals = new ArrayList<Entry>();
-        for(rollNocursorData.moveToFirst(); !rollNocursorData.isAfterLast(); rollNocursorData.moveToNext()) {
+        for (rollNocursorData.moveToFirst(); !rollNocursorData.isAfterLast(); rollNocursorData.moveToNext()) {
             int columnIndexOrThrow = rollNocursorData.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_GOLD_1_GM);
             String rollNo = rollNocursorData.getString(columnIndexOrThrow);
-            Log.v("Sateesh: " , "*** Each Roll No is: " + rollNo);
+            Log.v("Sateesh: ", "*** Each Roll No is: " + rollNo);
             float mult = (range + 1);
             float val = (float) (Math.random() * mult) + 3;// + (float)
             // ((mult *
             // 0.1) / 10);
             yVals.add(new Entry(Float.valueOf(rollNo), i));
             i++;
-            Log.v("Sateesh: " , "*** Value of I is :" + i);
+            Log.v("Sateesh: ", "*** Value of I is :" + i);
         }
 
-        Log.v("Sateesh: " , "*** Y Values are: " + yVals );
-        Log.v("Sateesh: " , "*** X Values are: " + xVals );
+        Log.v("Sateesh: ", "*** Y Values are: " + yVals);
+        Log.v("Sateesh: ", "*** X Values are: " + xVals);
 
         // create a dataset and give it a type
         LineDataSet set1 = new LineDataSet(yVals, "DataSet 1");
@@ -399,49 +372,6 @@ public class DrawActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         mChart.setData(data);
     }
 
-    @Override
-    public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
-        Log.i("Gesture", "START");
-    }
-
-    @Override
-    public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
-        Log.i("Gesture", "END, lastGesture: " + lastPerformedGesture);
-
-        // un-highlight values after the gesture is finished and no single-tap
-        if(lastPerformedGesture != ChartTouchListener.ChartGesture.SINGLE_TAP)
-            mChart.highlightValues(null); // or highlightTouch(null) for callback to onNothingSelected(...)
-    }
-
-    @Override
-    public void onChartLongPressed(MotionEvent me) {
-        Log.i("LongPress", "Chart longpressed.");
-    }
-
-    @Override
-    public void onChartDoubleTapped(MotionEvent me) {
-        Log.i("DoubleTap", "Chart double-tapped.");
-    }
-
-    @Override
-    public void onChartSingleTapped(MotionEvent me) {
-        Log.i("SingleTap", "Chart single-tapped.");
-    }
-
-    @Override
-    public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
-        Log.i("Fling", "Chart flinged. VeloX: " + velocityX + ", VeloY: " + velocityY);
-    }
-
-    @Override
-    public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
-        Log.i("Scale / Zoom", "ScaleX: " + scaleX + ", ScaleY: " + scaleY);
-    }
-
-    @Override
-    public void onChartTranslate(MotionEvent me, float dX, float dY) {
-        Log.i("Translate / Move", "dX: " + dX + ", dY: " + dY);
-    }
 
     @Override
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
