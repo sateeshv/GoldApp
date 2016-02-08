@@ -1,5 +1,7 @@
 package sateesh.com.goldapp;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,12 +18,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.util.Calendar;
 
 import sateesh.com.goldapp.Data.DatabaseContract;
 import sateesh.com.goldapp.Network.ExitNoInternet;
 import sateesh.com.goldapp.Network.ExitWithInternet;
 import sateesh.com.goldapp.Network.InternetCheck;
 import sateesh.com.goldapp.Network.LaunchNoInternet;
+import sateesh.com.goldapp.Notifications.AlarmReceiver;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -55,6 +59,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button chart = (Button) findViewById(R.id.chart);
         chart.setOnClickListener(this);
+
+
+        Intent myIntent = new Intent(this, AlarmReceiver.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this, 0, myIntent, 0);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        Calendar firingCal= Calendar.getInstance();
+        Calendar currentCal = Calendar.getInstance();
+
+        firingCal.set(Calendar.HOUR_OF_DAY, 13); // At the hour you wanna fire
+        firingCal.set(Calendar.MINUTE, 0); // Particular minute
+        firingCal.set(Calendar.SECOND, 0); // particular second
+
+        long intendedTime = firingCal.getTimeInMillis();
+        long currentTime = currentCal.getTimeInMillis();
+
+        if(intendedTime >= currentTime) // you can add buffer time too here to ignore some small differences in milliseconds
+        {
+            //set from today
+            alarmManager.setInexactRepeating(AlarmManager.RTC,
+                    intendedTime, AlarmManager.INTERVAL_DAY,
+                    pendingIntent);
+
+        }
+        else{
+            //set from next day
+            // you might consider using calendar.add() for adding one day to the current day
+            firingCal.add(Calendar.DAY_OF_MONTH, 1);
+            intendedTime = firingCal.getTimeInMillis();
+
+            alarmManager.setInexactRepeating(AlarmManager.RTC,
+                    intendedTime, AlarmManager.INTERVAL_DAY,
+                    pendingIntent);
+
+        }
+//        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+//        alarmManager.setInexactRepeating(AlarmManager.RTC, Calendar.getInstance().getTimeInMillis(), 5 * 1000, pendingIntent);
+
     }
 
     @Override

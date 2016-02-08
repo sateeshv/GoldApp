@@ -16,7 +16,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -62,6 +63,12 @@
         <provider
             android:name=".Data.DatabaseProvider"
             android:authorities="sateesh.com.goldapp" />
+
+        <service android:name=".Notifications.MyAlarmService"
+            android:enabled="true" />
+
+        <receiver android:name=".Notifications.AlarmReceiver"
+            />
     </application>
 
 </manifest>
