@@ -119,13 +119,13 @@ public class DatabaseProvider extends ContentProvider {
                 break;
 
             case QUERY_CITY_SILVER_LAST_90_DAYS:
-                String query_silver_90_days = "SELECT * from (SELECT PriceDate , Gold1Gram from PriceInfo Where " + selection + " order by PriceDate desc limit 90) ORDER BY PriceDate ASC";
+                String query_silver_90_days = "SELECT * from (SELECT PriceDate , Silver1Gram from PriceInfo Where " + selection + " order by PriceDate desc limit 90) ORDER BY PriceDate ASC";
                 cursorData = databaseHelper.getReadableDatabase().rawQuery(query_silver_90_days, selectionArgs);
                 cursorData.setNotificationUri(getContext().getContentResolver(), uri);
                 break;
 
             case QUERY_CITY_SILVER_LAST_12_MONTHS:
-                String query_silver_365_days = "SELECT * from (SELECT PriceDate , Gold1Gram from PriceInfo Where " + selection + " order by PriceDate desc limit 365) ORDER BY PriceDate ASC";
+                String query_silver_365_days = "SELECT * from (SELECT PriceDate , Silver1Gram from PriceInfo Where " + selection + " order by PriceDate desc limit 365) ORDER BY PriceDate ASC";
                 cursorData = databaseHelper.getReadableDatabase().rawQuery(query_silver_365_days, selectionArgs);
                 cursorData.setNotificationUri(getContext().getContentResolver(), uri);
                 break;
