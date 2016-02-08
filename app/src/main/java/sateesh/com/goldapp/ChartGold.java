@@ -223,12 +223,14 @@ public class ChartGold extends Fragment implements OnChartValueSelectedListener,
             case "Last 30 Days":
                 Log.v("Sateesh: ", "*** Final Values userselected Duratoin is: Lasat 30 Days");
                 Log.v("Sateesh: ", "*** Final Values userselected City is: " + cityFilter[0]);
-                setData(200, 300);
-                mChart.invalidate();
+                setData(4, cityFilter[0]);
+                mChart.notifyDataSetChanged();
                 break;
             case "Last 90 Days":
                 Log.v("Sateesh: ", "*** Final Values userselected Duratoin is: Lasat 90 Days");
                 Log.v("Sateesh: ", "*** Final Values userselected City is: " + cityFilter[0]);
+                setData(5, cityFilter[0]);
+                mChart.notifyDataSetChanged();
                 break;
             case "One Year":
                 Log.v("Sateesh: ", "*** Final Values userselected Duratoin is: Lasat 365 Days");
@@ -237,14 +239,17 @@ public class ChartGold extends Fragment implements OnChartValueSelectedListener,
         }
     }
 
-    private void setData(int count, float range) {
+    private void setData(int QUERY_PARAM_ID, String city) {
 
 
-        Uri uri = Uri.withAppendedPath(DatabaseContract.PriceInfo.CONTENT_URI, "4");
+        Uri uri = Uri.withAppendedPath(DatabaseContract.PriceInfo.CONTENT_URI, String.valueOf(QUERY_PARAM_ID));
         String[] Dateprojection = {DatabaseContract.PriceInfo.COLUMN_DATE};
+        String cityQuery = DatabaseContract.PriceInfo.COLUMN_CITY_NAME + "=" + '"' + city + '"';
+
+
         List<String> xVals = new ArrayList<>();
 
-        Cursor cursorData = getActivity().getContentResolver().query(uri, Dateprojection, null, null, null);
+        Cursor cursorData = getActivity().getContentResolver().query(uri, Dateprojection, cityQuery, null, null);
 //        Log.v("Sateesh: ", "*** Chart - Date cursor Data: " + DatabaseUtils.dumpCursorToString(cursorData));
 
 //        cursorData.moveToFirst();
@@ -255,18 +260,18 @@ public class ChartGold extends Fragment implements OnChartValueSelectedListener,
                 int columnIndexOrThrow = cursorData.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_DATE);
                 String rawDate = cursorData.getString(columnIndexOrThrow);
                 Log.v("Sateesh: ", "*** raw Date each Value: " + rawDate);
-                String finalDateValue = rawDate.split("-")[2]+  "-" + Month_Names[(Integer.parseInt(rawDate.split("-")[1])-1)];
+                String finalDateValue = rawDate.split("-")[2] + "-" + Month_Names[(Integer.parseInt(rawDate.split("-")[1]) - 1)];
                 Log.v("Sateesh: ", "*** final Date each Value: " + finalDateValue);
                 xVals.add(finalDateValue);
             }
         }
 
-        ArrayList<Entry> yVals = new ArrayList<Entry>(4);
+        ArrayList<Entry> yVals = new ArrayList<Entry>();
 
-        Uri rollNouri = Uri.withAppendedPath(DatabaseContract.PriceInfo.CONTENT_URI, "4");
+        Uri rollNouri = Uri.withAppendedPath(DatabaseContract.PriceInfo.CONTENT_URI, String.valueOf(QUERY_PARAM_ID));
         String[] rollNoprojection = {DatabaseContract.PriceInfo.COLUMN_GOLD_1_GM};
 
-        Cursor rollNocursorData = getActivity().getContentResolver().query(rollNouri, rollNoprojection, null, null, null);
+        Cursor rollNocursorData = getActivity().getContentResolver().query(rollNouri, rollNoprojection, cityQuery, null, null);
 //        cursorData.moveToFirst();
 
         int cursorDataValue = cursorData.getCount();
@@ -278,8 +283,8 @@ public class ChartGold extends Fragment implements OnChartValueSelectedListener,
             int columnIndexOrThrow = rollNocursorData.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_GOLD_1_GM);
             String rollNo = rollNocursorData.getString(columnIndexOrThrow);
             Log.v("Sateesh: ", "*** Each Roll No is: " + rollNo);
-            float mult = (range + 1);
-            float val = (float) (Math.random() * mult) + 3;// + (float)
+//            float mult = (range + 1);
+//            float val = (float) (Math.random() * mult) + 3;// + (float)
             // ((mult *
             // 0.1) / 10);
             yVals.add(new Entry(Float.valueOf(rollNo), i));
