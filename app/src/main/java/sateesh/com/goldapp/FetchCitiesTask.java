@@ -41,7 +41,7 @@ public class FetchCitiesTask extends AsyncTask<Void, Void, Void> {
         //        if exists, then incremental insert
         //        else insert everything
         //        Query for last record
-        Uri uri = Uri.withAppendedPath(DatabaseContract.CityInfo.CONTENT_URI, "13");
+        Uri uri = Uri.withAppendedPath(DatabaseContract.CityInfo.CONTENT_URI, "14");
         Log.v("Sateesh: ", "*** URI link is: " + uri);
         Cursor cursorLastRecord = context.getContentResolver().query(uri, null, null, null, null);
         Log.v("Sateesh: ", "*** are there any records: " + (cursorLastRecord != null ? cursorLastRecord.getCount() : 0));
@@ -52,15 +52,15 @@ public class FetchCitiesTask extends AsyncTask<Void, Void, Void> {
         String sheetURL = null;
 
         try {
-            if (cursorLastRecord != null ) {
+            if (cursorLastRecord != null && cursorLastRecord.getCount() > 0) {
                 cursorLastRecord.moveToFirst();
-                lastInsertedDate = cursorLastRecord.getString(cursorLastRecord.getColumnIndexOrThrow(DatabaseContract.CityInfo.COLUMN_CITY_NAME));
-                Log.v("Sateesh: ", "*** Last Inserted Date is: " + lastInsertedDate);
-                sheetURL = "https://spreadsheets.google.com/feeds/list/" + KEY + "/od6/public/values?alt=json" + "&sq=date>" + lastInsertedDate;
+                lastInsertedDate = cursorLastRecord.getString(cursorLastRecord.getColumnIndexOrThrow(DatabaseContract.CityInfo.COLUMN_S_NO));
+                Log.v("Sateesh: ", "*** Last Inserted City is: " + lastInsertedDate);
+                sheetURL = "https://spreadsheets.google.com/feeds/list/" + KEY + "/2/public/values?alt=json" + "&sq=sno>" + lastInsertedDate;
 
             } else {
                 Log.v("Sateesh: ", "*** No insertions till Now");
-                sheetURL = "https://spreadsheets.google.com/feeds/list/" + KEY + "/od6/public/values?alt=json";
+                sheetURL = "https://spreadsheets.google.com/feeds/list/" + KEY + "/2/public/values?alt=json";
             }
 
         } catch (CursorIndexOutOfBoundsException e) {
@@ -71,7 +71,7 @@ public class FetchCitiesTask extends AsyncTask<Void, Void, Void> {
 //        Establishing connection to Spreadsheet
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
-        String sheetString = null;
+        String rawCitiesSheet = null;
 
 
         try {
@@ -100,8 +100,8 @@ public class FetchCitiesTask extends AsyncTask<Void, Void, Void> {
             if (buffer.length() == 0) {
                 return null;
             }
-            sheetString = buffer.toString();
-            Log.v("Sateesh", "*** " + sheetString);
+            rawCitiesSheet = buffer.toString();
+            Log.v("Sateesh", "*** " + rawCitiesSheet);
 
 
         } catch (MalformedURLException e) {
@@ -122,7 +122,7 @@ public class FetchCitiesTask extends AsyncTask<Void, Void, Void> {
         }
 
         try {
-            getSheetDataFromJSON(sheetString);
+            getSheetDataFromJSON(rawCitiesSheet);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -130,14 +130,14 @@ public class FetchCitiesTask extends AsyncTask<Void, Void, Void> {
     }
 
     //    Extract data from JSON file
-    private void getSheetDataFromJSON(String sheetString) throws JSONException {
+    private void getSheetDataFromJSON(String citiesSheet) throws JSONException {
 
 
         List<ContentValues> data;
-        List<ContentValues> cityData;
+//        List<ContentValues> cityData;
         int numberOfRows;
-
-        JSONObject mainloop = new JSONObject(sheetString);
+        Log.v("Sateesh: ", "*** citiesSheet is: " + citiesSheet);
+        JSONObject mainloop = new JSONObject(citiesSheet);
         JSONObject feed = mainloop.getJSONObject("feed");
 
         JSONObject searchResultsObject = feed.getJSONObject("openSearch$totalResults");
@@ -151,63 +151,56 @@ public class FetchCitiesTask extends AsyncTask<Void, Void, Void> {
             numberOfRows = searchTotalCount.getInt("$t");
 
             data = new ArrayList<ContentValues>();
-            cityData = new ArrayList<ContentValues>();
+//            cityData = new ArrayList<ContentValues>();
 
             for (int i = 0; i < numberOfRows; i++) {
                 String[] rowData = new String[numberOfRows - 1];
 
-                String date, city, gold_22_1gm, silver_1gm, gold_change, silver_change;
+                String city, s_no;
 
                 JSONObject eachRow = entry.getJSONObject(i);
 
-
-                JSONObject date_Object = eachRow.getJSONObject("gsx$date");
-                date = date_Object.getString("$t");
-
-
-                JSONObject city_Object = eachRow.getJSONObject("gsx$city");
+                JSONObject city_Object = eachRow.getJSONObject("gsx$cityname");
                 city = city_Object.getString("$t");
+                Log.v("Sateesh: ", "*** City from JSON is: " + city);
 
-                JSONObject gold_22_1gm_Object = eachRow.getJSONObject("gsx$gold22ct1gram");
-                gold_22_1gm = gold_22_1gm_Object.getString("$t");
+                JSONObject sno_Object = eachRow.getJSONObject("gsx$sno");
+                s_no = sno_Object.getString("$t");
 
-                JSONObject silver_1gm_Object = eachRow.getJSONObject("gsx$silver1gram");
-                silver_1gm = silver_1gm_Object.getString("$t");
-
-                JSONObject gold_Change_Object = eachRow.getJSONObject("gsx$goldchange");
-                gold_change = gold_Change_Object.getString("$t");
-
-                JSONObject silver_Change_Object = eachRow.getJSONObject("gsx$silverchange");
-                silver_change = silver_Change_Object.getString("$t");
+                Log.v("Sateesh: ", "*** SNo from JSON is: " + s_no);
+//                JSONObject date_Object = eachRow.getJSONObject("gsx$date");
+//                date = date_Object.getString("$t");
+//
+//
+//                JSONObject city_Object = eachRow.getJSONObject("gsx$city");
+//                city = city_Object.getString("$t");
+//
+//                JSONObject gold_22_1gm_Object = eachRow.getJSONObject("gsx$gold22ct1gram");
+//                gold_22_1gm = gold_22_1gm_Object.getString("$t");
+//
+//                JSONObject silver_1gm_Object = eachRow.getJSONObject("gsx$silver1gram");
+//                silver_1gm = silver_1gm_Object.getString("$t");
+//
+//                JSONObject gold_Change_Object = eachRow.getJSONObject("gsx$goldchange");
+//                gold_change = gold_Change_Object.getString("$t");
+//
+//                JSONObject silver_Change_Object = eachRow.getJSONObject("gsx$silverchange");
+//                silver_change = silver_Change_Object.getString("$t");
 
                 ContentValues values = new ContentValues();
-                values.put(DatabaseContract.PriceInfo.COLUMN_DATE, date);
-                values.put(DatabaseContract.PriceInfo.COLUMN_CITY_NAME, city);
-                values.put(DatabaseContract.PriceInfo.COLUMN_GOLD_1_GM, gold_22_1gm);
-                values.put(DatabaseContract.PriceInfo.COLUMN_SILVER_1_GM, silver_1gm);
-                values.put(DatabaseContract.PriceInfo.COLUMN_GOLD_CHANGE, gold_change);
-                values.put(DatabaseContract.PriceInfo.COLUMN_SILVER_CHANGE, silver_change);
+
+                values.put(DatabaseContract.CityInfo.COLUMN_CITY_NAME, city);
+                values.put(DatabaseContract.CityInfo.COLUMN_S_NO, s_no);
 
                 data.add(values);
 
-                ContentValues cityValues = new ContentValues();
-                cityValues.put(DatabaseContract.CityInfo.COLUMN_CITY_NAME, city);
-                cityData.add(cityValues);
-                Log.v("Sateesh: ", "*** City Values are : " + cityData);
+                Log.v("Sateesh: ", "*** City Values are : " + data);
 
             }
+
             if (data.size() > 0) {
-                ContentValues[] dataArray = new ContentValues[data.size()];
-                ContentValues[] values = data.toArray(dataArray);
-                Log.v("Sateesh: ", "**** content Values data " + values);
-
-                Uri data_uri = Uri.withAppendedPath(DatabaseContract.PriceInfo.CONTENT_URI, "0");
-                int insertedRecords = context.getContentResolver().bulkInsert(data_uri, dataArray);
-                Log.v("Sateesh: ", "*** FetchPricesTask + Data Inserted Records: " + insertedRecords);
-            }
-            if (cityData.size() > 0) {
-                ContentValues[] cityDataArray = new ContentValues[cityData.size()];
-                ContentValues[] cityValues = cityData.toArray(cityDataArray);
+                ContentValues[] cityDataArray = new ContentValues[data.size()];
+                ContentValues[] cityValues = data.toArray(cityDataArray);
                 Log.v("Sateesh: ", "**** City Values data " + cityValues);
 
                 Uri city_uri = Uri.withAppendedPath(DatabaseContract.CityInfo.CONTENT_URI, "1");
@@ -215,11 +208,11 @@ public class FetchCitiesTask extends AsyncTask<Void, Void, Void> {
                 Log.v("Sateesh: ", "*** FetchPricesTask + City Inserted Records: " + insertedRecords);
             }
             double endTime = System.currentTimeMillis();
-            Log.v("Sateesh: ", "*** Time taken to insert " + ((endTime - startTime)/1000));
+            Log.v("Sateesh: ", "*** Time taken to insert " + ((endTime - startTime) / 1000));
         } else {
             Log.v("Sateesh: ", "NO New Data Available");
             long endTime = System.currentTimeMillis();
-            Log.v("Sateesh: ", "*** Time taken to Check new Data Available " + (endTime - startTime));
+            Log.v("Sateesh: ", "*** Time taken to Check new Data Available " + (endTime - startTime)/1000);
         }
 
 

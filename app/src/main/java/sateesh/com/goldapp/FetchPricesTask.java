@@ -135,7 +135,7 @@ public class FetchPricesTask extends AsyncTask<Void, Void, Void> {
 
 
         List<ContentValues> data;
-        List<ContentValues> cityData;
+//        List<ContentValues> cityData;
         int numberOfRows;
 
         JSONObject mainloop = new JSONObject(sheetString);
@@ -152,7 +152,7 @@ public class FetchPricesTask extends AsyncTask<Void, Void, Void> {
             numberOfRows = searchTotalCount.getInt("$t");
 
             data = new ArrayList<ContentValues>();
-            cityData = new ArrayList<ContentValues>();
+//            cityData = new ArrayList<ContentValues>();
 
             for (int i = 0; i < numberOfRows; i++) {
                 String[] rowData = new String[numberOfRows - 1];
@@ -191,10 +191,10 @@ public class FetchPricesTask extends AsyncTask<Void, Void, Void> {
 
                 data.add(values);
 
-                ContentValues cityValues = new ContentValues();
-                cityValues.put(DatabaseContract.CityInfo.COLUMN_CITY_NAME, city);
-                cityData.add(cityValues);
-                Log.v("Sateesh: ", "*** City Values are : " + cityData);
+//                ContentValues cityValues = new ContentValues();
+//                cityValues.put(DatabaseContract.CityInfo.COLUMN_CITY_NAME, city);
+//                cityData.add(cityValues);
+//                Log.v("Sateesh: ", "*** City Values are : " + cityData);
 
             }
             if (data.size() > 0) {
@@ -207,15 +207,15 @@ public class FetchPricesTask extends AsyncTask<Void, Void, Void> {
                 int insertedRecords = context.getContentResolver().bulkInsert(data_uri, dataArray);
                 Log.v("Sateesh: ", "*** FetchPricesTask + Data Inserted Records: " + insertedRecords);
             }
-            if (cityData.size() > 0) {
-                ContentValues[] cityDataArray = new ContentValues[cityData.size()];
-                ContentValues[] cityValues = cityData.toArray(cityDataArray);
-                Log.v("Sateesh: ", "**** City Values data " + cityValues);
-
-                Uri city_uri = Uri.withAppendedPath(DatabaseContract.CityInfo.CONTENT_URI, "1");
-                int insertedRecords = context.getContentResolver().bulkInsert(city_uri, cityDataArray);
-                Log.v("Sateesh: ", "*** FetchPricesTask + City Inserted Records: " + insertedRecords);
-            }
+//            if (cityData.size() > 0) {
+//                ContentValues[] cityDataArray = new ContentValues[cityData.size()];
+//                ContentValues[] cityValues = cityData.toArray(cityDataArray);
+//                Log.v("Sateesh: ", "**** City Values data " + cityValues);
+//
+//                Uri city_uri = Uri.withAppendedPath(DatabaseContract.CityInfo.CONTENT_URI, "1");
+//                int insertedRecords = context.getContentResolver().bulkInsert(city_uri, cityDataArray);
+//                Log.v("Sateesh: ", "*** FetchPricesTask + City Inserted Records: " + insertedRecords);
+//            }
             double endTime = System.currentTimeMillis();
             Log.v("Sateesh: ", "*** Time taken to insert " + ((endTime - startTime)/1000));
         } else {

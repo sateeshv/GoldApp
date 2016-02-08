@@ -171,15 +171,17 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         Log.v("Sateesh: ", "*** onLoadFinished reached");
         Log.v("Sateesh: ", "*** Cursor Data in onLoadFinised: " + DatabaseUtils.dumpCursorToString(data));
-        if (data.getCount() > 0) {
-            search_prams_titles = (LinearLayout) findViewById(R.id.search_params);
+        search_prams_titles = (LinearLayout) findViewById(R.id.search_params);
+        if (data.getCount() > 0 && data != null) {
+
             search_prams_titles.setVisibility(View.VISIBLE);
             cursorAdapter.swapCursor(data);
         } else {
 
             TextView empty = (TextView) findViewById(R.id.emptyListElem);
-            search_prams_titles.setVisibility(View.GONE);
             listView.setEmptyView(empty);
+            search_prams_titles.setVisibility(View.GONE);
+
             cursorAdapter.swapCursor(null);
         }
 

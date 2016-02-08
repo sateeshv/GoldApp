@@ -37,9 +37,11 @@ public class DatabaseProvider extends ContentProvider {
     public static final int DELETE_CITIES = 12;
 
     public static final int QUERY_CITY = 13;
-    public static final int QUERY_CITY_COUNT = 14;
+    public static final int QUERY_CITY_LAST_RECORD = 14;
 
     public static final int QUERY_DATE_CITY = 15;
+
+
 
     @Override
     public boolean onCreate() {
@@ -64,7 +66,7 @@ public class DatabaseProvider extends ContentProvider {
         matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_PRICE_INFO + "/11", DELETE_PRICES);
         matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_CITY_INFO + "/12", DELETE_CITIES);
         matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_CITY_INFO + "/13", QUERY_CITY);
-        matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_CITY_INFO + "/14", QUERY_CITY_COUNT);
+        matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_CITY_INFO + "/14", QUERY_CITY_LAST_RECORD);
         matcher.addURI(DatabaseContract.AUTHORITY, DatabaseContract.PATH_PRICE_INFO + "/15", QUERY_DATE_CITY);
     }
 
@@ -131,9 +133,15 @@ public class DatabaseProvider extends ContentProvider {
                 break;
 
             case QUERY_CITY:
-                cursorData = databaseHelper.getReadableDatabase().query(DatabaseContract.CityInfo.TABLE_NAME, null, null, null, null, null, null, null);
+                cursorData = databaseHelper.getReadableDatabase().query(DatabaseContract.CityInfo.TABLE_NAME, projection, selection, selectionArgs, sortOrder, null, null, null);
                 cursorData.setNotificationUri(getContext().getContentResolver(), uri);
                 break;
+
+            case QUERY_CITY_LAST_RECORD:
+                cursorData = databaseHelper.getReadableDatabase().query(DatabaseContract.CityInfo.TABLE_NAME, projection, selection, selectionArgs, sortOrder, null, DatabaseContract.CityInfo.COLUMN_S_NO + " DESC ", " 1");
+                cursorData.setNotificationUri(getContext().getContentResolver(), uri);
+                break;
+
 
             case QUERY_DATE_CITY:
                 String query = "SELECT * FROM PriceInfo where " + selection;

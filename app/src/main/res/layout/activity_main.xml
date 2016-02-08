@@ -76,7 +76,8 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"
-        android:text="chart template" />
+        android:text="chart template"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/insert"
@@ -85,7 +86,8 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"
-        android:text="Insert" />
+        android:text="Insert"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/delete"
@@ -94,7 +96,8 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"
-        android:text="delete" />
+        android:text="delete"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/export"
@@ -103,5 +106,6 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"
-        android:text="export" />
+        android:text="export"
+        android:visibility="gone" />
 </LinearLayout>

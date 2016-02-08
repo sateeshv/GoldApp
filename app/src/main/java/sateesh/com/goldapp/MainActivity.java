@@ -94,8 +94,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.insert:
-                FetchPricesTask task = new FetchPricesTask(getApplicationContext());
-                task.execute();
+                FetchPricesTask pricesTask = new FetchPricesTask(getApplicationContext());
+                FetchCitiesTask citiesTask = new FetchCitiesTask(getApplicationContext());
+                citiesTask.execute();
+                pricesTask.execute();
                 break;
 
             case R.id.delete:
