@@ -152,12 +152,6 @@ public class ChartGold extends Fragment implements OnChartValueSelectedListener,
         // set the marker to the chart
         mChart.setMarkerView(mv);
 
-//        // x-axis limit line
-//        LimitLine llXAxis = new LimitLine(10f, "Index 10");
-//        llXAxis.setLineWidth(4f);
-//        llXAxis.enableDashedLine(10f, 10f, 0f);
-//        llXAxis.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
-//        llXAxis.setTextSize(10f);
 
         XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -166,37 +160,15 @@ public class ChartGold extends Fragment implements OnChartValueSelectedListener,
         xAxis.setDrawAxisLine(true);
         xAxis.setDrawGridLines(false);
 
-        //xAxis.setValueFormatter(new MyCustomXAxisValueFormatter());
-        //xAxis.addLimitLine(llXAxis); // add x-axis limit line
-
-//        Typeface tf = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
-
-//        LimitLine ll1 = new LimitLine(130f, "Upper Limit");
-//        ll1.setLineWidth(4f);
-//        ll1.enableDashedLine(10f, 10f, 0f);
-//        ll1.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
-//        ll1.setTextSize(10f);
-////        ll1.setTypeface(tf);
-
-//        LimitLine ll2 = new LimitLine(-30f, "Lower Limit");
-//        ll2.setLineWidth(4f);
-//        ll2.enableDashedLine(10f, 10f, 0f);
-//        ll2.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
-//        ll2.setTextSize(10f);
-////        ll2.setTypeface(tf);
-
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.removeAllLimitLines(); // reset all limit lines to avoid overlapping lines
-//        leftAxis.addLimitLine(ll1);
-//        leftAxis.addLimitLine(ll2);
-//        leftAxis.setAxisMaxValue(220f);
-//        leftAxis.setAxisMinValue(-50f);
+
         leftAxis.setStartAtZero(false);
         //leftAxis.setYOffset(20f);
 //        leftAxis.enableGridDashedLine(10f, 10f, 0f);
 
         // limit lines are drawn behind data (and not on top)
-        leftAxis.setDrawLimitLinesBehindData(true);
+//        leftAxis.setDrawLimitLinesBehindData(true);
 
         mChart.getAxisRight().setEnabled(false);
 
@@ -204,7 +176,7 @@ public class ChartGold extends Fragment implements OnChartValueSelectedListener,
         //mChart.getViewPortHandler().setMaximumScaleX(2f);
 
         mChart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
-        mChart.invalidate();
+//        mChart.invalidate();
 
         // get the legend (only possible after setting data)
         Legend l = mChart.getLegend();
@@ -225,16 +197,22 @@ public class ChartGold extends Fragment implements OnChartValueSelectedListener,
                 Log.v("Sateesh: ", "*** Final Values userselected City is: " + cityFilter[0]);
                 setData(4, cityFilter[0]);
                 mChart.notifyDataSetChanged();
+                mChart.invalidate();
                 break;
             case "Last 90 Days":
                 Log.v("Sateesh: ", "*** Final Values userselected Duratoin is: Lasat 90 Days");
                 Log.v("Sateesh: ", "*** Final Values userselected City is: " + cityFilter[0]);
+
                 setData(5, cityFilter[0]);
                 mChart.notifyDataSetChanged();
+                mChart.invalidate();
                 break;
             case "One Year":
                 Log.v("Sateesh: ", "*** Final Values userselected Duratoin is: Lasat 365 Days");
                 Log.v("Sateesh: ", "*** Final Values userselected City is: " + cityFilter[0]);
+                setData(6, cityFilter[0]);
+                mChart.notifyDataSetChanged();
+                mChart.invalidate();
                 break;
         }
     }
@@ -248,6 +226,8 @@ public class ChartGold extends Fragment implements OnChartValueSelectedListener,
 
 
         List<String> xVals = new ArrayList<>();
+
+        ArrayList<Entry> yVals = new ArrayList<Entry>();
 
         Cursor cursorData = getActivity().getContentResolver().query(uri, Dateprojection, cityQuery, null, null);
 //        Log.v("Sateesh: ", "*** Chart - Date cursor Data: " + DatabaseUtils.dumpCursorToString(cursorData));
@@ -264,39 +244,25 @@ public class ChartGold extends Fragment implements OnChartValueSelectedListener,
                 Log.v("Sateesh: ", "*** final Date each Value: " + finalDateValue);
                 xVals.add(finalDateValue);
             }
+
+            int i = 0;
+            for (cursorData.moveToFirst(); !cursorData.isAfterLast(); cursorData.moveToNext()) {
+
+                int columnIndexOrThrow = cursorData.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_GOLD_1_GM);
+                String Gold_1_Gram = cursorData.getString(columnIndexOrThrow);
+                Log.v("Sateesh: ", "*** Each Roll No is: " + Gold_1_Gram);
+                yVals.add(new Entry(Float.valueOf(Gold_1_Gram), i));
+                i++;
+                Log.v("Sateesh: ", "*** Value of I is :" + i);
+            }
         }
 
-        ArrayList<Entry> yVals = new ArrayList<Entry>();
-
-        Uri rollNouri = Uri.withAppendedPath(DatabaseContract.PriceInfo.CONTENT_URI, String.valueOf(QUERY_PARAM_ID));
-        String[] rollNoprojection = {DatabaseContract.PriceInfo.COLUMN_GOLD_1_GM};
-
-        Cursor rollNocursorData = getActivity().getContentResolver().query(rollNouri, rollNoprojection, cityQuery, null, null);
-//        cursorData.moveToFirst();
-
-        int cursorDataValue = cursorData.getCount();
-        int rollNocursorDataValue = rollNocursorData.getCount();
-        int i = 0;
-        Log.v("Sateesh: ", "*** X and Y Column Sizes are : " + cursorDataValue + " *** " + rollNocursorDataValue);
-//        List<Entry> yVals = new ArrayList<Entry>();
-        for (rollNocursorData.moveToFirst(); !rollNocursorData.isAfterLast(); rollNocursorData.moveToNext()) {
-            int columnIndexOrThrow = rollNocursorData.getColumnIndexOrThrow(DatabaseContract.PriceInfo.COLUMN_GOLD_1_GM);
-            String rollNo = rollNocursorData.getString(columnIndexOrThrow);
-            Log.v("Sateesh: ", "*** Each Roll No is: " + rollNo);
-//            float mult = (range + 1);
-//            float val = (float) (Math.random() * mult) + 3;// + (float)
-            // ((mult *
-            // 0.1) / 10);
-            yVals.add(new Entry(Float.valueOf(rollNo), i));
-            i++;
-            Log.v("Sateesh: ", "*** Value of I is :" + i);
-        }
 
         Log.v("Sateesh: ", "*** Y Values are: " + yVals);
         Log.v("Sateesh: ", "*** X Values are: " + xVals);
 
         // create a dataset and give it a type
-        LineDataSet set1 = new LineDataSet(yVals, "DataSet 1");
+        LineDataSet set1 = new LineDataSet(yVals, "");
         // set1.setFillAlpha(110);
         // set1.setFillColor(Color.RED);
 
@@ -311,6 +277,8 @@ public class ChartGold extends Fragment implements OnChartValueSelectedListener,
         set1.setValueTextSize(9f);
         set1.setFillColor(R.color.colorAccent);
         set1.setCubicIntensity(20f);
+        set1.setDrawValues(false);
+        set1.setLabel("Data denotes 1 gram");
 
 //        Drawable drawable = ContextCompat.getDrawable(this, R.drawable.fade_red);
 //        set1.setFillDrawable(drawable);

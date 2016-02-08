@@ -88,17 +88,22 @@ public class DatabaseProvider extends ContentProvider {
                 break;
 
             case QUERY_CITY_GOLD_LAST_30_DAYS:
-                cursorData = databaseHelper.getReadableDatabase().query(DatabaseContract.PriceInfo.TABLE_NAME, projection, selection, selectionArgs, sortOrder, null, DatabaseContract.PriceInfo.COLUMN_DATE + " DESC ", " 30");
+//                cursorData = databaseHelper.getReadableDatabase().query(DatabaseContract.PriceInfo.TABLE_NAME, projection, selection, selectionArgs, sortOrder, null, DatabaseContract.PriceInfo.COLUMN_DATE + " DESC ", " 30");
+//                cursorData.setNotificationUri(getContext().getContentResolver(), uri);
+                String query_gold_30_days = "SELECT * from (SELECT PriceDate , Gold1Gram from PriceInfo Where " + selection + " order by PriceDate desc limit 30) ORDER BY PriceDate ASC";
+                cursorData = databaseHelper.getReadableDatabase().rawQuery(query_gold_30_days, selectionArgs);
                 cursorData.setNotificationUri(getContext().getContentResolver(), uri);
                 break;
 
             case QUERY_CITY_GOLD_LAST_90_DAYS:
-                cursorData = databaseHelper.getReadableDatabase().query(DatabaseContract.PriceInfo.TABLE_NAME, projection, selection, selectionArgs, sortOrder, null, DatabaseContract.PriceInfo.COLUMN_DATE + " DESC ", " 90");
+                String query_gold_90_days = "SELECT * from (SELECT PriceDate , Gold1Gram from PriceInfo Where " + selection + " order by PriceDate desc limit 90) ORDER BY PriceDate ASC";
+                cursorData = databaseHelper.getReadableDatabase().rawQuery(query_gold_90_days, selectionArgs);
                 cursorData.setNotificationUri(getContext().getContentResolver(), uri);
                 break;
 
             case QUERY_CITY_GOLD_LAST_12_MONTHS:
-                cursorData = databaseHelper.getReadableDatabase().query(DatabaseContract.PriceInfo.TABLE_NAME, projection, selection, selectionArgs, sortOrder, null, DatabaseContract.PriceInfo.COLUMN_DATE + " DESC ", " 365");
+                String query_gold_365_days = "SELECT * from (SELECT PriceDate , Gold1Gram from PriceInfo Where " + selection + " order by PriceDate desc limit 90) ORDER BY PriceDate ASC";
+                cursorData = databaseHelper.getReadableDatabase().rawQuery(query_gold_365_days, selectionArgs);
                 cursorData.setNotificationUri(getContext().getContentResolver(), uri);
                 break;
 
@@ -108,17 +113,20 @@ public class DatabaseProvider extends ContentProvider {
                 break;
 
             case QUERY_CITY_SILVER_LAST_30_DAYS:
-                cursorData = databaseHelper.getReadableDatabase().query(DatabaseContract.PriceInfo.TABLE_NAME, projection, selection, selectionArgs, sortOrder, null, DatabaseContract.PriceInfo.COLUMN_DATE + " DESC ", " 30");
+                String query_silver_30_days = "SELECT * from (SELECT PriceDate , Silver1Gram from PriceInfo Where " + selection + " order by PriceDate desc limit 30) ORDER BY PriceDate ASC";
+                cursorData = databaseHelper.getReadableDatabase().rawQuery(query_silver_30_days, selectionArgs);
                 cursorData.setNotificationUri(getContext().getContentResolver(), uri);
                 break;
 
             case QUERY_CITY_SILVER_LAST_90_DAYS:
-                cursorData = databaseHelper.getReadableDatabase().query(DatabaseContract.PriceInfo.TABLE_NAME, projection, selection, selectionArgs, sortOrder, null, DatabaseContract.PriceInfo.COLUMN_DATE + " DESC ", " 90");
+                String query_silver_90_days = "SELECT * from (SELECT PriceDate , Gold1Gram from PriceInfo Where " + selection + " order by PriceDate desc limit 90) ORDER BY PriceDate ASC";
+                cursorData = databaseHelper.getReadableDatabase().rawQuery(query_silver_90_days, selectionArgs);
                 cursorData.setNotificationUri(getContext().getContentResolver(), uri);
                 break;
 
             case QUERY_CITY_SILVER_LAST_12_MONTHS:
-                cursorData = databaseHelper.getReadableDatabase().query(DatabaseContract.PriceInfo.TABLE_NAME, projection, selection, selectionArgs, sortOrder, null, DatabaseContract.PriceInfo.COLUMN_DATE + " DESC ", " 365");
+                String query_silver_365_days = "SELECT * from (SELECT PriceDate , Gold1Gram from PriceInfo Where " + selection + " order by PriceDate desc limit 365) ORDER BY PriceDate ASC";
+                cursorData = databaseHelper.getReadableDatabase().rawQuery(query_silver_365_days, selectionArgs);
                 cursorData.setNotificationUri(getContext().getContentResolver(), uri);
                 break;
 
@@ -129,10 +137,9 @@ public class DatabaseProvider extends ContentProvider {
 
             case QUERY_DATE_CITY:
                 String query = "SELECT * FROM PriceInfo where " + selection;
-                Log.v("Sateesh: " , "*** RawQuery string is : " + query );
+                Log.v("Sateesh: ", "*** RawQuery string is : " + query);
                 cursorData = databaseHelper.getReadableDatabase().rawQuery(query, selectionArgs);
-
-
+                cursorData.setNotificationUri(getContext().getContentResolver(), uri);
         }
 
         return cursorData;
